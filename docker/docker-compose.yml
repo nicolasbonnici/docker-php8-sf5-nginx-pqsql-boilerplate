@@ -7,7 +7,7 @@ services:
     restart: always
     environment:
         POSTGRES_PASSWORD: password
-        POSTGRES_DB: cryptobot
+        POSTGRES_DB: dbtest
     ports:
         - 15432:5432
 
