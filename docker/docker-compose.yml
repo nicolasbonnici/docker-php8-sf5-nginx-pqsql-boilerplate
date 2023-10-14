@@ -17,6 +17,7 @@ services:
       context: ./php-fpm
     depends_on:
       - db
+      - ssh-agent
     environment:
       - APP_ENV=${APP_ENV}
       - APP_SECRET=${APP_SECRET}
@@ -36,8 +37,17 @@ services:
       - ./logs:/var/log
     depends_on:
       - php-fpm
+      - ssh-agent
     ports:
       - "80:80"
       - "443:443"
-
-
+  
+  ssh-agent:
+    build:
+      context: ./ssh-agent
+      dockerfile: Dockerfile
+    volumes:
+      - ~/.ssh:/root/.ssh
+    environment:
+      - SSH_AUTH_SOCK=/tmp/ssh-agent.sock
+    command: eval $(ssh-agent -s) && ssh-add /root/.ssh/id_ed25519
