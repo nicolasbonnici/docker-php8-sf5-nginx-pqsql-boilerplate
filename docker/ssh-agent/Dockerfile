@@ -7,4 +7,7 @@ RUN apk --update --no-cache add openssh-client
 RUN mkdir -p /root/.ssh
 
 # sets ssh-agent -s as the default command to be run when the container starts.
-ENTRYPOINT ["ssh-agent", "-s"]
+COPY start_ssh_agent.sh /usr/local/bin/start_ssh_agent.sh
+RUN chmod +x /usr/local/bin/start_ssh_agent.sh
+
+ENTRYPOINT ["/usr/local/bin/start_ssh_agent.sh"]
