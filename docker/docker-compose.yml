@@ -22,14 +22,14 @@ services:
       - APP_SECRET=${APP_SECRET}
       - DATABASE_URL=${DATABASE_URL}
     volumes:
-      - ./../src/:/var/www
+      - ./../project/:/var/www
 
   nginx:
     container_name: nginx
     build:
       context: ./nginx
     volumes:
-      - ./../src/:/var/www
+      - ./../project/:/var/www
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/sites/:/etc/nginx/sites-available
       - ./nginx/conf.d/:/etc/nginx/conf.d
