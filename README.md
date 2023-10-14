@@ -37,7 +37,7 @@ To do this, perhaps it could be an idea to `git clone ` the repo on your local m
 Assuming you followed me in the container by `docker exec -it ...`, you exit to your operating system/ wsl:
 ```bash
 exit
-git clone git*@git*:abc/abc .
+git clone {your-git-repository} . 
 docker exec -it php-fpm /bin/bash 
 composer i
 ```

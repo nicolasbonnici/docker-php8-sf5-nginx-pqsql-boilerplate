@@ -10,20 +10,47 @@ COPY wait-for-it.sh /usr/bin/wait-for-it
 RUN chmod +x /usr/bin/wait-for-it
 
 # RUN: A series of commands that are executed inside the image.
-    # apt-get update: Updates the package lists for upgrades and new package installations.
-RUN apt-get update && \
-    # Installs a series of packages, including libraries and tools.
-    apt-get install -y --no-install-recommends libssl-dev zlib1g-dev curl git unzip netcat-traditional libxml2-dev libpq-dev libzip-dev librabbitmq-dev libxslt1-dev && \
-    # Installs the APCu extension for PHP.
-    pecl install apcu amqp && \
-    # Configures PHP extensions for PostgreSQL (pgsql).
-    docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && \
-    # Installs various PHP extensions (zip, opcache, intl, pdo_pgsql, pgsql, xsl, amqp).
-    docker-php-ext-install -j$(nproc) zip opcache intl pdo_pgsql pgsql xsl && \
-    # Enables specific PHP extensions (apcu, pdo_pgsql, sodium).
-    docker-php-ext-enable apcu pdo_pgsql sodium amqp && \
-    # Cleans up the package cache and temporary files to reduce the image size.
-    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+# apt-get update: Updates the package lists for upgrades and new package installations.
+RUN apt-get update
+# Installs a series of packages, including libraries and tools.
+RUN apt-get install -y --no-install-recommends \
+    libssl-dev \
+    zlib1g-dev \
+    curl \
+    git \
+    unzip \
+    netcat-traditional \
+    libxml2-dev \
+    libpq-dev \
+    libzip-dev \
+    librabbitmq-dev \
+    libxslt1-dev
+# Installs the APCu extension for PHP.
+RUN pecl install \
+    apcu \
+    amqp \
+    redis
+# Configures PHP extensions for PostgreSQL (pgsql).
+RUN docker-php-ext-configure \
+    pgsql -with-pgsql=/usr/local/pgsql
+# Installs PHP extensions.
+RUN docker-php-ext-install \
+    -j$(nproc) \
+    zip \
+    opcache \
+    intl \
+    pdo_pgsql \
+    pgsql \
+    xsl
+# Enables PHP extensions.
+RUN docker-php-ext-enable \
+    apcu \
+    pdo_pgsql \
+    sodium \
+    amqp
+# Cleans up the package cache and temporary files to reduce the image size.
+RUN apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
     # Possible values for ext-name:
     #  bcmath bz2 calendar ctype curl dba dl_test dom enchant exif ffi fileinfo filter ftp gd gettext 
     #  gmp hash iconv imap intl json ldap mbstring mysqli oci8 odbc opcache pcntl pdo pdo_dblib pdo_firebird pdo_mysql
