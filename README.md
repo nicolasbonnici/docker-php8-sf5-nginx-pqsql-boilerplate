@@ -1,5 +1,11 @@
 ### Getting started
 
+Please add an empty text file `docker/env.local` and enter your key file name
+
+```
+SSH_KEY_NAME=id_my_key_file_name
+```
+
 ```bash
 cd docker/ && docker-compose up --build
 ```

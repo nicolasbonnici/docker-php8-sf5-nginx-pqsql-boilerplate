@@ -50,6 +50,5 @@ services:
       - ~/.ssh:/root/.ssh
     environment:
       - SSH_AUTH_SOCK=/tmp/ssh-agent.sock
-      - SSH_KEY_NAME={fill_in_your_ssh_key_name}
     command: >
       /bin/sh -c "eval $(ssh-agent -s) && ssh-add /root/.ssh/${SSH_KEY_NAME} && tail -f /dev/null"
