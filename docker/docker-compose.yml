@@ -50,4 +50,5 @@ services:
       - ~/.ssh:/root/.ssh
     environment:
       - SSH_AUTH_SOCK=/tmp/ssh-agent.sock
-    command: /entry.sh
+    command: >
+      /bin/sh -c "eval $(ssh-agent -s) && ssh-add /root/.ssh/id_ed25519 && tail -f /dev/null"
