@@ -1,8 +1,8 @@
-# This Dockerfile is used to create an image that sets up a PHP 8.1 environment with various extensions and tools. 
+# This Dockerfile is used to create an image that sets up a PHP environment with various extensions and tools. 
 #  When a container is started from this image, it will install dependencies, wait for a database, apply migrations, and then start the PHP-FPM process.
 # 
-# Sets the base image for this Dockerfile. It means that this image is based on the official PHP 8.1-fpm image from Docker Hub.
-FROM php:8.1-fpm
+# Sets the base image for this Dockerfile. It means that this image is based on the official PHP image from Docker Hub.
+FROM php:8.2-fpm
 # Copies a file named wait-for-it.sh from the local file system (the directory where the Dockerfile is located) 
 #  to the /usr/bin/wait-for-it directory inside the image.
 COPY wait-for-it.sh /usr/bin/wait-for-it
@@ -51,7 +51,8 @@ RUN docker-php-ext-enable \
 # Cleans up the package cache and temporary files to reduce the image size.
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-    # Possible values for ext-name:
+
+# Possible values for ext-name:
     #  bcmath bz2 calendar ctype curl dba dl_test dom enchant exif ffi fileinfo filter ftp gd gettext 
     #  gmp hash iconv imap intl json ldap mbstring mysqli oci8 odbc opcache pcntl pdo pdo_dblib pdo_firebird pdo_mysql
     #  pdo_oci pdo_odbc pdo_pgsql pdo_sqlite pgsql phar posix pspell readline reflection session shmop simplexml 
