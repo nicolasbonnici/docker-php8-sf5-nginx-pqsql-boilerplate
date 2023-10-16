@@ -17,27 +17,39 @@ services:
       context: ./php-fpm
     depends_on:
       - db
+      - ssh-agent
     environment:
       - APP_ENV=${APP_ENV}
       - APP_SECRET=${APP_SECRET}
       - DATABASE_URL=${DATABASE_URL}
     volumes:
-      - ./../src/:/var/www
+      - ./../project/:/var/www
 
   nginx:
     container_name: nginx
     build:
       context: ./nginx
     volumes:
-      - ./../src/:/var/www
+      - ./../project/:/var/www
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/sites/:/etc/nginx/sites-available
       - ./nginx/conf.d/:/etc/nginx/conf.d
       - ./logs:/var/log
     depends_on:
       - php-fpm
+      - ssh-agent
     ports:
       - "80:80"
       - "443:443"
-
-
+  
+  ssh-agent:
+    build:
+      context: ./ssh-agent
+      dockerfile: Dockerfile
+    volumes:
+      - ~/.ssh:/root/.ssh
+    environment:
+      - SSH_AUTH_SOCK=/tmp/ssh-agent.sock
+      - SSH_KEY_NAME=${SSH_KEY_NAME}
+    command: >
+      /bin/sh -c "eval $(ssh-agent -s) && ssh-add /root/.ssh/${SSH_KEY_NAME} && tail -f /dev/null"
